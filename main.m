@@ -1,5 +1,5 @@
 % Author: Paul Lathrop
-% Date last edited: 4/6/23
+% Date last edited: 4/7/23
 %% Description
 % main function to initialize environment, pick an initial and final point
 % from the largest connected component, run QRRT, and plot the result
@@ -7,10 +7,10 @@
 % create_Env.m, GRNFLCC (inline), QRRT.m and dependencies, plotfinaltree.m,
 % plotenv.m
 
-D = 2; %dimension
-bound = 72;
-r = 0.5;
-%dynamics matrices defined in oracle.m and oraclem2.m
+D = 2; %dimension, unused and only coded for D = 2;
+bound = 72; %size of square environment, characteristic length
+r = 0.5; %concentration
+%dynamics matrices defined in oracle.m
 
 
 grid = create_Env(bound,r,D);
@@ -18,7 +18,7 @@ grid = create_Env(bound,r,D);
 x_init = GRNFLCC(grid,bound); %xi is initial point
 x_goal = GRNFLCC(grid,bound); %goal point
 tic
-[nodes,parents,oraclecount1] = QRRT(grid,x_init,x_goal,2,r);
+[nodes,parents,oraclecount] = QRRT(grid,x_init,x_goal,2,r);
 t_elapsed = toc;
 plotfinaltree(grid,nodes,parents)
 
@@ -38,7 +38,7 @@ function rand_node = GRNFLCC(grid,bound)
 %% Uses:
 % main.m (inline)
 
-temp = bwconncomp(invertgrid(grid),4);
+temp = bwconncomp(invertGrid(grid),4);
 groups = temp.PixelIdxList; %pull group lists
 lengths = zeros([length(groups) 1]); %preallocate lengths
 for k = 1:length(groups)
@@ -48,9 +48,9 @@ end
 [elem,ind] = max(lengths); %find which group has the most elements
 largest_group = groups(ind); %pick largest group
 largest_group = largest_group{1}; %open cell
-randomnum = largest_group(randsample(elem,1)); %returns wrapped number of random element
-if(rem(randomnum,bound) == 0), x2 = bound-1; x1 = floor(randomnum/bound)-1; else
-x1 = floor(randomnum/bound);x2 = rem(randomnum,bound)-1; %unwrap to get coordinates
+random_num = largest_group(randsample(elem,1)); %returns wrapped number of random element
+if(rem(random_num,bound) == 0), x2 = bound-1; x1 = floor(random_num/bound)-1; else
+x1 = floor(random_num/bound);x2 = rem(random_num,bound)-1; %unwrap to get coordinates
 end
 rand_node = [x2+.5 x1+.5];
 end

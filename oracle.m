@@ -1,6 +1,6 @@
 function b = oracle(i,database,env,node_list)
 % Author: Paul Lathrop, MAE, UCSD
-% Date last edited: 4/6/23
+% Date last edited: 4/7/23
 %% Description:
 % Oracle function tests reachability for index i of database from nearest 
 % node in node_list in environment env, and returns 1 for reachable and 0 
@@ -21,9 +21,9 @@ function b = oracle(i,database,env,node_list)
 % QRRT.m
 
 i = i+1; %1 is added due to for loop in vf.m 0:N-1
-rawdata = database(i,:);
-point = rawdata(1:2);
-parent = rawdata(3);
+raw_data = database(i,:);
+point = raw_data(1:2);
+parent = raw_data(3);
 
 conn_comp_test = sameConnectedComponent(env,node_list(parent,:),point); %connected component test
 if(conn_comp_test)
@@ -51,7 +51,7 @@ b = conn_comp_test & reachability_test;
         % oracle.m
         answer = 0;
         x1 = [ceil(x1(1)) ceil(x1(2))]; x2 = [ceil(x2(1)) ceil(x2(2))]; %define what grid spacing the points are in
-        x1index = length(grid(1,:))*(x1(2)-1) + x1(1); x2index = length(grid(1,:))*(x2(2)-1) + x2(1); %define the unwrapped grid indices of each point
+        x1_index = length(grid(1,:))*(x1(2)-1) + x1(1); x2index = length(grid(1,:))*(x2(2)-1) + x2(1); %define the unwrapped grid indices of each point
         if(grid(ceil(x2(1)),ceil(x2(2))) == 1), answer = 0; return; end %efficiency line: if x2 is not in free space return 0
         inverted_grid = invertGrid(grid); %invert grid, free space is 0
         connected_component_object = bwconncomp(inverted_grid,4); %get connectivity info of grid
@@ -59,7 +59,7 @@ b = conn_comp_test & reachability_test;
         for k = 1:length(groups) %check over all groups
             current_group = groups(k); %get current grooup
             current_group = current_group{1}; %open the cell
-            if(ismember(x1index,current_group)&&ismember(x2index,current_group)), answer = 1; end %if both x1,x2 are in same group, output connected
+            if(ismember(x1_index,current_group)&&ismember(x2index,current_group)), answer = 1; end %if both x1,x2 are in same group, output connected
         end
     end
 
@@ -109,7 +109,7 @@ b = conn_comp_test & reachability_test;
             % Author: Paul Lathrop, MAE, UCSD
             % Date last edited: 4/6/23
             %% Description:
-            % Inline function straight line rasterizes between p1 and p2 with
+            % Inline function that straight line rasterizes between p1 and p2 with
             % rastnum points in grid, and returns whether the path is
             % obstacle free
             %% Inputs:

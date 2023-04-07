@@ -1,6 +1,6 @@
 function graph = create_Env(gridnum,r,D)
 % Author: Paul Lathrop
-% Date last edited: 4/6/23
+% Date last edited: 4/7/23
 %% Description:
 % Function creates a square environment grid of 0s and 1s, where 1 corresponds
 % with obstacles and 0 free space, of side length gridnum and concentration

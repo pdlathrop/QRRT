@@ -1,6 +1,6 @@
 function output = pointobscheck(grid,p1)
 % Author: Paul Lathrop, MAE, UCSD
-% Date last edited: 4/6/23
+% Date last edited: 4/7/23
 %% Description:
 % Function checks whether point p1 is obstacle free in grid 
 %% Inputs:

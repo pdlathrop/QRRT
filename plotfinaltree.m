@@ -2,7 +2,7 @@ function plotfinaltree(env,nodes,parents)
 % Author: Paul Lathrop
 % Date last edited: 4/6/23
 %% Description:
-% Function plots final path in environment env
+% Function plots final tree in environment env
 %% Inputs:
 % env: environment
 % nodes: returned tree of nodes
