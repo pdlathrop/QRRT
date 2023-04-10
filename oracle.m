@@ -1,15 +1,19 @@
 function b = oracle(i,database,env,node_list)
 % Author: Paul Lathrop, MAE, UCSD
-% Date last edited: 4/7/23
+% Date last edited: 4/9/23
 %% Description:
 % Oracle function tests reachability for index i of database from nearest 
 % node in node_list in environment env, and returns 1 for reachable and 0 
 % else. Reachability is not tested rigorously, the function tests whether
 % the point given by index i of database is reachable with an obstacle 
-% free path with the given dynamics and feedback controller
+% free path with the given dynamics and feedback controller. If input i is
+% int, quantum database use, if input i is double array (size (1,2)),
+% classical use. Input database is parent index for classical use
 %% Inputs:
-% i: int, index of database being queried
-% database: double array (size (n,3)), database of possible points and parents
+% i: int, index of database being queried OR double array (size (1,2)),
+% selected point
+% database: double array (size (n,3)), database of possible points and
+% parents OR int, selected parent index
 % env: Boolean array (shape = (L,L)), environment
 % node_list: double array (size (m,2)), list of nodes in current tree 
 %% Outputs:
@@ -18,12 +22,19 @@ function b = oracle(i,database,env,node_list)
 % sameConnectedComponent (inline), invertGrid.m, reachable (inline),
 % quickRast (inline), pointobscheck.m
 %% Uses:
-% QRRT.m
+% QRRT.m, RRTclassical.m
+if(length(i) == 1) %quantum use
+    i = i+1; %1 is added due to for loop in vf.m 0:N-1
+    raw_data = database(i,:);
+    point = raw_data(1:2);
+    parent = raw_data(3);
+elseif(length(i) == 2) %classical use, i is point, database is parent index
+    point = i;
+    parent = database;
+else
+    return %error, index i is not set for either quantum or classical use
+end
 
-i = i+1; %1 is added due to for loop in vf.m 0:N-1
-raw_data = database(i,:);
-point = raw_data(1:2);
-parent = raw_data(3);
 
 conn_comp_test = sameConnectedComponent(env,node_list(parent,:),point); %connected component test
 if(conn_comp_test)
